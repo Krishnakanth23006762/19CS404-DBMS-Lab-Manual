@@ -1,307 +1,215 @@
-# Experiment 2: DDL Commands
+# Experiment 3: DML Commands
 
 ## AIM
-To study and implement DDL commands and different types of constraints.
+To study and implement DML (Data Manipulation Language) commands.
 
 ## THEORY
 
-### 1. CREATE
-Used to create a new relation (table).
-
+### 1. INSERT INTO
+Used to add records into a relation.
+These are three type of INSERT INTO queries which are as
+A)Inserting a single record
+**Syntax (Single Row):**
+```sql
+INSERT INTO table_name (field_1, field_2, ...) VALUES (value_1, value_2, ...);
+```
+**Syntax (Multiple Rows):**
+```sql
+INSERT INTO table_name (field_1, field_2, ...) VALUES
+(value_1, value_2, ...),
+(value_3, value_4, ...);
+```
+**Syntax (Insert from another table):**
+```sql
+INSERT INTO table_name SELECT * FROM other_table WHERE condition;
+```
+### 2. UPDATE
+Used to modify records in a relation.
+Syntax:
+```sql
+UPDATE table_name SET column1 = value1, column2 = value2 WHERE condition;
+```
+### 3. DELETE
+Used to delete records from a relation.
+**Syntax (All rows):**
+```sql
+DELETE FROM table_name;
+```
+**Syntax (Specific condition):**
+```sql
+DELETE FROM table_name WHERE condition;
+```
+### 4. SELECT
+Used to retrieve records from a table.
 **Syntax:**
 ```sql
-CREATE TABLE (
-  field_1 data_type(size),
-  field_2 data_type(size),
-  ...
-);
+SELECT column1, column2 FROM table_name WHERE condition;
 ```
-### 2. ALTER
-Used to add, modify, drop, or rename fields in an existing relation.
-(a) ADD
-```sql
-ALTER TABLE std ADD (Address CHAR(10));
-```
-(b) MODIFY
-```sql
-ALTER TABLE relation_name MODIFY (field_1 new_data_type(size));
-```
-(c) DROP
-```sql
-ALTER TABLE relation_name DROP COLUMN field_name;
-```
-(d) RENAME
-```sql
-ALTER TABLE relation_name RENAME COLUMN old_field_name TO new_field_name;
-```
-### 3. DROP TABLE
-Used to permanently delete the structure and data of a table.
-```sql
-DROP TABLE relation_name;
-```
-### 4. RENAME
-Used to rename an existing database object.
-```sql
-RENAME TABLE old_relation_name TO new_relation_name;
-```
-### CONSTRAINTS
-Constraints are used to specify rules for the data in a table. If there is any violation between the constraint and the data action, the action is aborted by the constraint. It can be specified when the table is created (using CREATE TABLE) or after it is created (using ALTER TABLE).
-### 1. NOT NULL
-When a column is defined as NOT NULL, it becomes mandatory to enter a value in that column.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size) NOT NULL
-);
-```
-### 2. UNIQUE
-Ensures that values in a column are unique.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size) UNIQUE
-);
-```
-### 3. CHECK
-Specifies a condition that each row must satisfy.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size) CHECK (logical_expression)
-);
-```
-### 4. PRIMARY KEY
-Used to uniquely identify each record in a table.
-Properties:
-Must contain unique values.
-Cannot be null.
-Should contain minimal fields.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size) PRIMARY KEY
-);
-```
-### 5. FOREIGN KEY
-Used to reference the primary key of another table.
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  column_name data_type(size),
-  FOREIGN KEY (column_name) REFERENCES other_table(column)
-);
-```
-### 6. DEFAULT
-Used to insert a default value into a column if no value is specified.
 
-Syntax:
-```sql
-CREATE TABLE Table_Name (
-  col_name1 data_type,
-  col_name2 data_type,
-  col_name3 data_type DEFAULT 'default_value'
-);
-```
-**Question 1**
---
-Write a SQL query to Add a new column mobilenumber as number in the Student_details table.
-Sample table: Student_details
+Question 1
+---
+Increase the reorder level by 30% for products from 'Food' category having quantity in stock less than 50% of existing reorder level in the products table
 
-![image](https://github.com/user-attachments/assets/50b82986-2ad7-4c52-9270-69b0dfdab1d7)
+![image](https://github.com/user-attachments/assets/d6808661-aec8-4bea-9770-f735352c57a3)
 
 ### QUERY:
 ```sql
-ALTER TABLE Student_details
-ADD COLUMN mobilenumb number;
-
+UPDATE products
+SET reorder_lvl=reorder_lvl*1.3
+WHERE category='Food'
+AND quantity<(reorder_lvl*0.5);
 ```
 **Output:**
 
-![image](https://github.com/user-attachments/assets/b7d633f4-11a1-4634-9810-ba9ca1545810)
+![image](https://github.com/user-attachments/assets/27042f9c-9b4d-48b4-9cb4-7895e2f7e7b0)
 
 **Question 2**
 ---
-Write an SQL command can to add a column named email of type TEXT to the customers table
+Write a SQL query to reduce the reorder level by 30% where cost price is more than 50 and quantity in stock is less than 100 in the products table.
 
-![image](https://github.com/user-attachments/assets/765b9980-e7aa-4b86-925f-5b8b1d5de207)
+![image](https://github.com/user-attachments/assets/d5c32f3f-5fdd-4b48-8532-d341a7a0c922)
 
 ### QUERY:
 ```sql
-ALTER TABLE Customers ADD COLUMN email
-TEXT;
+UPDATE products
+SET reorder_lvl=reorder_lvl*0.7
+WHERE cost_price>50
+AND quantity<100;
 ```
 **Output:**
 
-![image](https://github.com/user-attachments/assets/9d822908-7fe8-4571-8152-fcd79766221c)
+![image](https://github.com/user-attachments/assets/eff30eb5-026c-4c1d-b4bf-7229274fb916)
 
 **Question 3**
 ---
-In the Books table, insert a record where some fields are NULL, another record where all fields are filled without any NULL values, and a third record where some fields are filled, and others are left as NULL.
+Write a SQL statement to Double the salary for employees in department 20 who have a job_id ending with 'MAN'
 
-![image](https://github.com/user-attachments/assets/26f29b71-4358-4d60-8283-dd55aaf19ab6)
+![image](https://github.com/user-attachments/assets/19a4f90b-02e8-424b-9f0e-4aea113b78b1)
 
 ### QUERY:
 ```sql
-INSERT INTO Books (ISBN, Title, Author, Publisher, Year)
-VALUES('978-1234567890', 'Introduction to AI', 'John Doe', NULL, NULL);
-INSERT INTO Books (ISBN, Title, Author, Publisher, Year)
-VALUES('978-9876543210', 'Deep Learning', 'Jane Doe', 'TechPress', '2022');
-INSERT INTO Books (ISBN, Title, Author, Publisher, Year)
-VALUES('978-1122334455', 'Cybersecurity Essentials', 'Alice Smith', NULL, 2021);
+UPDATE Employees
+SET salary=salary*2
+WHERE department_id = 20
+AND job_id LIKE '%MAN%';
 ```
-
 **Output:**
 
-![image](https://github.com/user-attachments/assets/46a9de97-049b-475f-99f5-77ef4cf27250)
+![image](https://github.com/user-attachments/assets/83db1717-75ad-4f6e-954a-c190e8bcd750)
 
 **Question 4**
 ---
-Create a table named Orders with the following constraints:
-OrderID as INTEGER should be the primary key.
-OrderDate as DATE should be not NULL.
-CustomerID as INTEGER should be a foreign key referencing Customers(CustomerID).
+Write a SQL statement to Change the supplier name to 'A1 Suppliers' where the supplier ID is 8 in the suppliers table.
+Table info
+suppliers(supplier_id,supplier_name,contact_person,phone_number,email,address)
 
-![image](https://github.com/user-attachments/assets/79f19da6-5183-4315-974e-6188807f3acd)
+![image](https://github.com/user-attachments/assets/f73c3402-e38a-4006-b88d-374f62afbdf5)
 
 ### QUERY:
 ```sql
-CREATE TABLE Orders(
-OrderID integer primary key,
-OrderDate date not null,
-CustomerID integer,
-foreign key (CustomerID) references Customers(CustomerID)
-);
+UPDATE suppliers
+SET supplier_name='A1 Suppliers'
+WHERE supplier_id=8;
 ```
 **Output:**
 
-![image](https://github.com/user-attachments/assets/932d1b23-d8c0-47c4-8433-c6e30bd58655)
+![image](https://github.com/user-attachments/assets/aef9d172-1c31-47be-a469-275ac14dd908)
 
 **Question 5**
 ---
-Create a table named ProjectAssignments with the following constraints:
-AssignmentID as INTEGER should be the primary key.
-EmployeeID as INTEGER should be a foreign key referencing Employees(EmployeeID).
-ProjectID as INTEGER should be a foreign key referencing Projects(ProjectID).
-AssignmentDate as DATE should be NOT NULL.
+Decrease the reorder level by 30 percent where the product name contains 'cream' and quantity in stock is higher than reorder level in the products table.
 
-![image](https://github.com/user-attachments/assets/cd4bd594-a57d-46c8-9ffe-a44db3f4a9c3)
+![image](https://github.com/user-attachments/assets/87c5babd-df6a-4f9b-b62a-4cefa0eab06c)
 
 ### QUERY:
 ```sql
-CREATE TABLE ProjectAssignments(
-AssignmentID INTEGER PRIMARY KEY,
-EmployeeID integer,
-ProjectID integer,
-AssignmentDate DATE NOT NULL,
-FOREIGN KEY(EmployeeID) references Employees(EmployeeID),
-FOREIGN KEY(ProjectID) references Projects(ProjectID)
-);
+UPDATE products
+SET reorder_lvl=reorder_lvl*0.7
+WHERE product_name LIKE '%cream%'
+AND quantity> reorder_lvl;
 ```
 **Output:**
 
-![image](https://github.com/user-attachments/assets/8e5252ac-9406-437a-a010-6f569a45cb73)
+![image](https://github.com/user-attachments/assets/d70e8337-58e5-4c1e-b169-24de74c6eb49)
 
 **Question 6**
 ---
-Create a table named Customers with the following columns:
-CustomerID as INTEGER
-Name as TEXT
-Email as TEXT
-JoinDate as DATETIME
+Write a SQL query to Delete customers from 'customer' table where 'GRADE' is greater than or equal to 2.
 
-![image](https://github.com/user-attachments/assets/8cc3b9a0-c44c-475a-bacb-d7ea36887df8)
+![image](https://github.com/user-attachments/assets/8f6a6974-a537-403e-b5b0-e7aba36ac36e)
 
 ### QUERY:
 ```sql
-CREATE TABLE Customers(
-CustomerID INTEGER,
-Name TEXT,
-Email TEXT,
-JoinDate DATETIME
-);
+DELETE FROM Customer
+WHERE GRADE>=2;
 ```
 **Output:**
 
-![image](https://github.com/user-attachments/assets/246efdb1-9d9b-4850-865a-5a1cdb28c8ad)
+![image](https://github.com/user-attachments/assets/d573d023-dfed-429d-89ab-4cee6ca9fc0d)
 
 **Question 7**
 ---
-create a table named jobs including columns job_id, job_title, min_salary and max_salary, and make sure that, the default value for job_title is blank and min_salary is 8000 and max_salary is NULL will be entered automatically at the time of insertion if no value assigned for the specified columns.
+Write a SQL query to Delete customers from 'customer' table where 'CUST_NAME' contains the substring 'Holmes'.
 
-![image](https://github.com/user-attachments/assets/40556e99-9a5b-4edf-aa84-61f69b995bdb)
+![image](https://github.com/user-attachments/assets/6b01804f-61cd-44ad-9fc8-3147e5356565)
 
 ### QUERY:
 ```sql
-CREATE TABLE jobs(
-job_id integer primary key,
-job_title text default '',
-min_salary integer default 8000,
-max_salary integer default null
-);
+DELETE FROM Customer
+WHERE CUST_NAME LIKE '%Holmes%';
 ```
-
 **Output:**
 
-![image](https://github.com/user-attachments/assets/3547b5dd-501f-4f67-942e-3104a4991858)
+![image](https://github.com/user-attachments/assets/c107cc22-9bf2-4a1d-ab53-3bc9aacae66f)
 
 **Question 8**
 ---
-Insert the below data into the Student_details table, allowing the Subject and MARKS columns to take their default values.
+Write a SQL query to Delete customers from 'customer' table where 'OPENING_AMT' is between 4000 and 6000.
 
-![image](https://github.com/user-attachments/assets/5ca1ff91-7c4e-4820-8934-75d699db2ea8)
+![image](https://github.com/user-attachments/assets/c1d8810e-1435-4f20-8457-9800ff5aae71)
 
 ### QUERY:
 ```sql
-INSERT INTO Student_details (RollNo, Name, Gender)
-VALUES (204, 'Samuel Black', 'M');
+DELETE FROM Customer
+WHERE OPENING_AMT
+BETWEEN 4000 AND 6000;
 ```
 **Output:**
 
-![image](https://github.com/user-attachments/assets/96a7acdb-8a85-4519-9c67-dacac216f656)
+![image](https://github.com/user-attachments/assets/ae244e57-7af4-412b-a7c5-de69bbaaa648)
 
 **Question 9**
 ---
-Create a new table named contacts with the following specifications:
-contact_id as INTEGER and primary key.
-first_name as TEXT and not NULL.
-last_name as TEXT and not NULL.
-email as TEXT.
-phone as TEXT and not NULL with a check constraint to ensure the length of phone is at least 10 characters.
+Write a SQL query to Delete customers from 'customer' table where 'GRADE' is odd.
 
-![image](https://github.com/user-attachments/assets/4bca0ac5-1898-4645-8aad-08e96dc088ce)
+![image](https://github.com/user-attachments/assets/e95c188c-b75b-42a2-9085-c93ba14068db)
 
 ### QUERY:
 ```sql
-CREATE TABLE contacts(
-contact_id integer primary key,
-first_name text not null,
-last_name test not_null,
-email text,
-phone text not null CHECK(LENGTH(phone)>=10)
-);
+DELETE FROM Customer
+WHERE GRADE%2 !=0;
 ```
 **Output:**
 
-![image](https://github.com/user-attachments/assets/8e09150c-4805-424f-a36e-8feb215ce707)
+![image](https://github.com/user-attachments/assets/e425d740-c01f-48ea-855a-9fc94693d4fb)
 
 **Question 10**
 ---
-Insert all books from Out_of_print_books into Books
-Table attributes are ISBN, Title, Author, Publisher, YearPublished
+Write a SQL query to Delete customers from 'customer' table where 'GRADE' is exactly 2.
 
-![image](https://github.com/user-attachments/assets/96c1870f-477a-4131-a9ac-390264771d2f)
+![image](https://github.com/user-attachments/assets/7078a74c-6db8-42bd-9d95-f5d30913575b)
 
 ### QUERY:
 ```sql
-INSERT INTO Books (ISBN, Title, Author, Publisher, YearPublished)
-SELECT ISBN, Title, Author, Publisher, YearPublished FROM Out_of_print_books;
+DELETE FROM Customer
+WHERE GRADE=2;
 ```
 **Output:**
 
-![image](https://github.com/user-attachments/assets/79de5057-4c64-41bf-bc74-6b45c33afad0)
+![image](https://github.com/user-attachments/assets/394b6599-2392-4e16-88df-6d6138c7e187)
 
-### Screenshot of Module 1 SEB Completion Grade:
-![image](https://github.com/user-attachments/assets/fe5356a1-8d46-4b91-af02-2cfbe6ca9f0a)
+### Screenshot of Module 2 SEB Completion Grade:
+![image](https://github.com/user-attachments/assets/d8798869-adf4-4e55-af82-703caa3b05dd)
 
 ## RESULT
-Thus, the SQL queries to implement different types of constraints and DDL commands have been executed successfully.
+Thus, the SQL queries to implement DML commands have been executed successfully.
